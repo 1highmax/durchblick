@@ -21,5 +21,5 @@ With so much data publicly available, we can answer many solar related questions
 
 ## Background Knowledge
 
-
+The more sun radiation a solar panel receives, the more energy it produces. Although this curve might not be linear, it is still monotonic. Hence, to find out how efficient a rooftop is, knowing how much sun radiation the roof receives is an important step. The amount of sunlight hitting a unit squared area is measured in kwH/m^2. Solar panels can not convert 100% of this energy into power, though. They typically have an efficiency factor of 0.15 - 0.2. How much solar energy lands on a square meter depends on the geographic location of the house. Generally, the closer a house is to the equator, the more energy does the sun have per square meter due to the angle between the ground and the sunrays ![Solar Irradiance](https://upload.wikimedia.org/wikipedia/commons/5/55/Seasons.too.png) [Source](https://en.wikipedia.org/wiki/Solar_irradiance#Projection_effect).
 
