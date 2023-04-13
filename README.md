@@ -61,6 +61,17 @@ To find out how to work with the OSM data in Python, refer to the coding hints s
 
 ### Satelite Information
 
+From the data we have collected so far, we can locate the rooftops of millions of buildings in germany, their size in square meters and the radiation it absorbs in kWh/m^2. However, as for most buildings only LOD0 or LOD1 are available, we can not determine whether the buildings has an flat or angled rooftop nor the azimuth of the roof. To achieve this task, we can apply computer vision on satelite data. 
+
+Unfortunately, there are no high resolution open source datasets with satelite imagery available. While some government organizations do release public satelite imagery, their resolution is by no means high enough to analyze rooftops, as it is often 1 km^2 per pixel or worse. 
+
+Luckily, commercial providers like [Google Maps](https://developers.google.com/maps/documentation/maps-static/start#MapTypes) allow us to request high resolution satelite imagery of any point on earth. The Google Cloud Platform Service [Static Maps API](https://developers.google.com/maps/documentation/maps-static/start) is the simplest one to use: By providing longitude latitude coordinates as URL parameters, this service returns a PNG image containing a clenaed satelite image at the given location. The [setup](https://developers.google.com/maps/documentation/maps-static/cloud-setup) is easy and can be done with anyone with a Google Cloud Account. **However:** This service comes at a cost. According to Googles [Pricing](https://developers.google.com/maps/documentation/maps-static/usage-and-billing), fetching one satelite image costs 0.002 USD. Hence, fetching satelite images of 1000 buildings costs 2.00 USD. Given that germany has millions of houses, fetching a high resolution image of each and every house is financially unfeasable. 
+
+By setting up a new Google Cloud Account, you receive a [starting budget](https://cloud.google.com/free?hl=de) for 300 USD. This should be enough to fetch as many satelite images as you need over the course of this hackaton. However, handle and monitor your cloud budget with care! 
+
+![Google Maps Imagery](https://maps.googleapis.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=12&maptype=satellite&size=400x400&key=AIzaSyA3kg7YWugGl1lTXmAmaBGPNhDW9pEh5bo&signature=5tyWj9NAOGlFz33nroLk6sV4ASk=)
+
+
 
 
 
