@@ -15,7 +15,7 @@ Luckily, we as Data Scientists can solve this challenge using openly available d
 With so much data publicly available, we can answer many solar related questions that are important for the clean energy future of germany, like:
 
 - How many german roofs must be equipped with solar panels to subtitute all of germany's focile energy sources?
-- In which regions of germany should solar be substituted the most?
+- In which regions of germany should solar be subsidized the most?
 - Where are the 100 buildings in germany with the largest roofs and the best efficiency per square meter?
 - How much electricity can the home owner of the house at location long/lat produce per year?
 
