@@ -1,5 +1,7 @@
 # tum.ai Solar Challenge
 
+![solar](https://user-images.githubusercontent.com/24369532/231741472-fd22977d-10a5-4715-aaf2-be472c7aaaaf.png)
+
 ## Motivation
 
 The future of energy is green! To accelerate the clean energy revolution, we must use the resources we have in the most effective manner. Last year, 50% more solar panels were installed on german roofs than the year before. While this is great news, it does not paint the full picture. Due to supply chain limitations and skill shortage, most home owners in germany have to wait up to 1 year for a consultation appointment with solar roof experts. For an installation, the waiting periods are even crazier: Waiting times for 2-3 years before a solar roof can be installed has become the new normal. The current solar market does not scale with the demand!
