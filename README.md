@@ -31,14 +31,14 @@ And maybe even:
 
 The more sun radiation a solar panel receives, the more energy it produces. Although this curve might not be linear, it is still monotonic. Hence, to find out how efficient a rooftop is, knowing how much sun radiation the roof receives is an important step. The amount of sunlight hitting a unit squared area is measured in kWh/m^2. Solar panels can not convert 100% of this energy into power, though. They typically have an efficiency factor of 0.15 - 0.2. How much solar energy lands on a square meter depends on the geographic location of the house. Generally, the closer a house is to the equator, the more energy does the sun have per square meter due to the angle between the ground and the sunrays.
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Seasons.too.png" width="100">
+<img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Seasons.too.png" width="400">
 [Source](https://en.wikipedia.org/wiki/Solar_irradiance#Projection_effect).
 
 ### Panel efficiency dependence on roof Azimuth and Tilt
 
 The azimuth and tilt of a roof influences the efficiency of the installed solar panels. Positioning a solar panel on a roof that faces the true south, with a roof that is slightly tilted, yields the most efficient conversion between incoming sun radiation and generated electricity. 
 
-![Azimuth and Tilt](https://i0.wp.com/www.prostarsolar.net/wp-content/uploads/2020/10/Solar-Panel-angle.jpg?resize=1024%2C454&ssl=1)   
+<img src="https://i0.wp.com/www.prostarsolar.net/wp-content/uploads/2020/10/Solar-Panel-angle.jpg?resize=1024%2C454&ssl=1" width="400">
 [Source](https://www.prostarsolar.net/article/how-to-set-solar-panel-angle-to-sun.html)
 
 ### Roof Size
