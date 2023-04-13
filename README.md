@@ -8,16 +8,20 @@ That's why we must ensure that the limited solar panel resources we have are use
 
 To optimize the wellfare accross germany, we should turn this process around and first evaluate which houses in germany are best suited for solar panels. Then, we should panel the best suited houses first, getting the most efficiency out of each newly installed panel, before moving on to less optimal houses. With limited solar panels available, maximizing the efficiency of each panel is crucial and the only way to maximize the clean energy produced in the country. 
 
-Luckily, we as Data Scientists can solve this challenge using openly available data! Using datasets from the german weather insitution [Deutscher Wetterdienst - DWD](https://www.dwd.de/), we can find out which regions in germany have the most sun. With [Püem Street Maps - OSM)[https://www.openstreetmap.org/about], we have a crowd sourced dataset available containing detailed information for any building accross the country, allowing us to run efficiently analysis on individual buildings at scale. Lastly, using Satelite Image Data from commercial vendors like [Google Maps Platform - GMP](https://developers.google.com/maps), we can even run computer vision algorithms on high quality satelite imagery to run fine grained analysis on individual houses. 
+Luckily, we as Data Scientists can solve this challenge using openly available data! Using datasets from the german weather insitution [Deutscher Wetterdienst - DWD](https://www.dwd.de/), we can find out which regions in germany have the most sun. With [Open Street Maps - OSM)[https://www.openstreetmap.org/about], we have a crowd sourced dataset available containing detailed information for any building accross the country, allowing us to run efficiently analysis on individual buildings at scale. Lastly, using Satelite Image Data from commercial vendors like [Google Maps Platform - GCP](https://developers.google.com/maps), we can even run computer vision algorithms on high quality satelite imagery to run fine grained analysis on individual houses. 
 
 ## Key Questions
 
 With so much data publicly available, we can answer many solar related questions that are important for the clean energy future of germany, like:
 
-- How many german roofs must be equipped with solar panels to subtitute all of germanies focile energy sources?
+- How many german roofs must be equipped with solar panels to subtitute all of germany's focile energy sources?
 - In which regions of germany should solar be substituted the most?
 - Where are the 100 buildings in germany with the largest roofs and the best efficiency per square meter?
 - How much electricity can the home owner of the house at location long/lat produce per year?
+
+And maybe even:
+- Is the roof of a candidate building even suitable for solar panels, or are windows or chimneys blocking the roof area?
+- Are other buildings, vegetation or even mountains casting large shadows onto a candiate building?
 
 ## Background Knowledge
 
@@ -71,7 +75,64 @@ By setting up a new Google Cloud Account, you receive a [starting budget](https:
 
 ![Google Maps Imagery](https://maps.googleapis.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=12&maptype=satellite&size=400x400&key=AIzaSyA3kg7YWugGl1lTXmAmaBGPNhDW9pEh5bo&signature=5tyWj9NAOGlFz33nroLk6sV4ASk=)
 
+## Coding Hints
 
+### Converting Gauss Krueger Zone 3 Coordinates to WGS 84 (long/lat)
 
+To convert between coordinate systems in python, a library called [pyproj](https://pyproj4.github.io/pyproj/stable/) does a lot of the heavy lifting. 
+
+Converting from longitude/latitdude to gauss krueger can be done with just a few lines of code:
+
+```python
+from pyproj import Transformer
+
+# Coordinates of TU Munich
+latitude, longitude = 48.1496636, 11.5656715
+
+# Define coordinate systems
+from_crs = "EPSG:4326"  # WGS 84
+to_crs = "EPSG:31467"  # Gauss Krüger Zone 3
+
+# Create transformer object
+transformer = Transformer.from_crs(from_crs, to_crs)
+
+# Convert latitude and longitude to Gauss Krüger coordinates
+h, r = transformer.transform(latitude, longitude)
+```
+
+To query the given `h, r` coordiantes against the DWD dataset, we must take the dataset boundaries into consideration.
+
+```python
+import numpy as np
+
+# Information extracted from the dataset header
+XLLCORNER = 3280500
+YLLCORNER = 5237500
+NROWS = 866
+CELLSIZE = 1000
+NODATA_VALUE = -999
+
+# Load data as 2d array
+data = np.loadtxt("grids_germany_annual_radiation_global_2022.asc", skiprows=28)
+data[data == -999] = np.nan
+
+y, x = math.floor((r - XLLCORNER) / CELLSIZE), NROWS - math.ceil((h - YLLCORNER) / CELLSIZE)
+radiance = data[x, y]
+```
+
+### Load OSM Buildings data
+
+To deal with OSM data, we can use a handy library called [Pyrosm](https://pyrosm.readthedocs.io/en/latest/) that loads OSM data as [GeoPandas](https://geopandas.org/en/stable/) data, including the polygonial building outline as a [Shapely](https://shapely.readthedocs.io/en/stable/manual.html) Polygon. 
+
+If you are only interested in the building information contained in the OSM data, you can use tools like [OSM Convert](https://wiki.openstreetmap.org/wiki/Osmconvert) and [OSM Filter](https://wiki.openstreetmap.org/wiki/Osmfilter) to generate new files that contain only a subset of the OSM data, which might speed up your development.
+
+```python
+from pyrosm import OSM
+
+osm = OSM('bremen-latest.osm.pbf')
+buildings = osm.get_buildings()
+```
+
+### Apply Computer Vision to Satelite Imagery
 
 
