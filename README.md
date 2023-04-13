@@ -63,7 +63,7 @@ All OSM Data is Open to the public and can be requested through various open API
 However, you can also download all OSM Data for offline use rom providers like [Geofabrik](https://download.geofabrik.de/europe.html) and process the data offline. This is extremely useful for our case, as spaming the OSM API for millions of buildings accross germany would certainly result in rate limits or even IP blocks. All available OSM Data accross [Germany](https://download.geofabrik.de/europe/germany.html) is 3.8 GB in size, and includes not just Building Data but all data OSM has about germany, including addresses, streets, and much more. Note that you can also just download and process the data for a certain region in germany to speed up your development. The smallest region is [Bremen](https://download.geofabrik.de/europe/germany/bremen.html) with only 18 MB in size.
 To find out how to work with the OSM data in Python, refer to the coding hints section below.
 
-![OSM LOD](https://osmbuildings.org/blog/2018-02-28_level_of_detail/lod.png)
+<img src="https://osmbuildings.org/blog/2018-02-28_level_of_detail/lod.png" width="600">
 
 ### Satelite Information
 
