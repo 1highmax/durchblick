@@ -46,7 +46,9 @@ if os.path.exists('best_model.pth'):
 # preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 
 #RGB Image
-image = 0
+image = cv2.cvtColor(cv2.imread("data/test/2.png"), cv2.COLOR_BGR2RGB)
+image = to_tensor(image)
+
 
 if best_model is not None:
     x_tensor = torch.from_numpy(image).to(DEVICE).unsqueeze(0)
@@ -55,4 +57,11 @@ if best_model is not None:
     pred_mask = pred_mask.detach().squeeze().cpu().numpy()
     # Convert pred_mask from `CHW` format to `HWC` format
     pred_mask = np.transpose(pred_mask,(1,2,0))
-    pred_mask = colour_code_segmentation(reverse_one_hot(pred_mask), select_class_rgb_values)
+    pred_mask = colour_code_segmentation(reverse_one_hot(pred_mask), select_class_rgb_values).astype("uint8")
+    cv2.imwrite("predicted_mask.png", cv2.cvtColor(pred_mask,cv2.COLOR_RGB2BGR))
+
+
+    # visualize(
+    #     original_image = image.transpose(1,2,0).astype('uint8'),
+    #     predicted_mask = pred_mask,
+    # )
