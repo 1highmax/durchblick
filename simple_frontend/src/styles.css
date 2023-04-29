@@ -1,0 +1,74 @@
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.left-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.container {
+  display: flex;
+  height: 100%;
+}
+
+.image-container {
+  flex: 1;
+  overflow: hidden;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.key-value-list {
+  flex: 1;
+  padding: 20px;
+}
+
+.key-value-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.key-value-list li {
+  margin-bottom: 10px;
+}
+
+.key-value-list .key {
+  font-weight: bold;
+  color: #333;
+}
+
+.key-value-list .value {
+  color: #777;
+}
+
+.right-side {
+  flex: 1;
+  position: relative;
+}
+
+#address-input {
+  position: absolute;
+  z-index: 1000;
+  top: 10px;
+  left: 10px;
+  width: calc(100% - 20px);
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
