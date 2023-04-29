@@ -97,7 +97,8 @@ preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 train_dataset = CustomDataset(
     x_train_dir, y_train_dir, 
     augmentation=get_training_augmentation(),
-    preprocessing=get_preprocessing(preprocessing_fn=preprocessing_fn),
+    #preprocessing=get_preprocessing(preprocessing_fn=preprocessing_fn),
+    preprocessing=get_preprocessing(preprocessing_fn=None),
     class_rgb_values=select_class_rgb_values,
 )
 

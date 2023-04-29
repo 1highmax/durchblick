@@ -62,7 +62,7 @@ test_dataset = CustomDataset(
     x_test_dir, 
     y_test_dir, 
     augmentation=get_validation_augmentation(), 
-    preprocessing=get_preprocessing(preprocessing_fn=preprocessing_fn),
+    preprocessing=get_preprocessing(preprocessing_fn=None),
     class_rgb_values=select_class_rgb_values,
 )
 
@@ -89,7 +89,7 @@ sample_preds_folder = 'sample_predictions/'
 if not os.path.exists(sample_preds_folder):
     os.makedirs(sample_preds_folder)
 
-for idx in range(len(test_dataset)):
+for idx in range(3):
 
     random_idx = random.randint(0, len(test_dataset)-1)
     image, gt_mask = test_dataset[random_idx]
