@@ -103,7 +103,7 @@ for idx in range(3):
     # Get prediction channel corresponding to building
     # Convert gt_mask from `CHW` format to `HWC` format
     gt_mask = np.transpose(gt_mask,(1,2,0))
-    image = np.transpose(image,(1,2,0))
+    image = image.transpose(1,2,0).astype('uint8')
     gt_mask = colour_code_segmentation(reverse_one_hot(gt_mask), select_class_rgb_values)
     cv2.imwrite(os.path.join(sample_preds_folder, f"sample_pred_{idx}.png"), np.hstack([image, gt_mask, pred_mask])[:,:,::-1])
     
