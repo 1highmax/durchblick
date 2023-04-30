@@ -14,6 +14,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 import albumentations as album
+import csv
 
 # !pip install -q -U segmentation-models-pytorch albumentations > /dev/null
 import segmentation_models_pytorch as smp
@@ -105,7 +106,7 @@ train_dataset = CustomDataset(
 valid_dataset = CustomDataset(
     x_valid_dir, y_valid_dir, 
     augmentation=get_validation_augmentation(), 
-    preprocessing=get_preprocessing(preprocessing_fn=preprocessing_fn),
+    preprocessing=get_preprocessing(preprocessing_fn=None),
     class_rgb_values=select_class_rgb_values,
 )
 
@@ -138,7 +139,41 @@ class diceloss(torch.nn.Module):
        B_sum = torch.sum(tflat * tflat)
        return 1 - ((2. * intersection + smooth) / (A_sum + B_sum + smooth) )
 
-loss_fn = diceloss()
+# loss_fn = diceloss()
+class_weights = [1,10,2,1]
+
+# loss_fn = torch.nn.CrossEntropyLoss(torch.tensor([100,255,100,100]))
+
+class WeightedDiceLoss(torch.nn.Module):
+    def __init__(self, weights):
+        super(WeightedDiceLoss, self).__init__()
+        self.weights = torch.tensor(weights).float()
+
+    def forward(self, pred, target):
+        smooth = 1.
+        num_classes = pred.shape[1]
+
+        # Flatten predictions and targets
+        pred_flat = pred.view(num_classes, -1)
+        target_flat = target.view(num_classes, -1)
+
+        # Calculate intersections, A_sum, and B_sum
+        intersections = (pred_flat * target_flat).sum(dim=-1)
+        A_sum = (pred_flat * pred_flat).sum(dim=-1)
+        B_sum = (target_flat * target_flat).sum(dim=-1)
+
+        # Calculate class losses
+        class_losses = 1 - ((2. * intersections + smooth) / (A_sum + B_sum + smooth))
+
+        # Calculate the weighted loss and normalize it based on the sum of the weights
+        loss = torch.dot(self.weights, class_losses) / self.weights.sum()
+
+        return loss
+
+# Example usage
+# weights = [1, 2, 3]  # Prioritize class 2 and 3 over class 1
+loss_fn = WeightedDiceLoss(class_weights)
+
 
 # define metrics
 metric_fn = smp.utils.metrics.IoU()
@@ -217,6 +252,26 @@ if TRAINING:
             best_iou_score = np.mean(metric_value_list_val)
             torch.save(model, './best_model.pth')
             print('Model saved!')
+
+        with open('loss.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            # Write the list to the CSV file
+            writer.writerow(loss_value_list[-1])
+
+        with open('iou.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            # Write the list to the CSV file
+            writer.writerow(metric_value_list[-1])
+
+        with open('loss_val.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            # Write the list to the CSV file
+            writer.writerow(loss_value_list_val[-1])
+
+        with open('iou_val.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            # Write the list to the CSV file
+            writer.writerow(metric_value_list_val[-1])
 
 
 
