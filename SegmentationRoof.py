@@ -20,7 +20,7 @@ import csv
 import segmentation_models_pytorch as smp
 from segmentation_models_pytorch import utils
 
-DATA_DIR = 'data'
+DATA_DIR = 'durchblick-main\data'
 
 x_train_dir = os.path.join(DATA_DIR, 'train')
 y_train_dir = os.path.join(DATA_DIR, 'train_labels')
@@ -28,7 +28,7 @@ y_train_dir = os.path.join(DATA_DIR, 'train_labels')
 x_valid_dir = os.path.join(DATA_DIR, 'val')
 y_valid_dir = os.path.join(DATA_DIR, 'val_labels')
 
-class_dict = pd.read_csv("label_class_dict.csv")
+class_dict = pd.read_csv("durchblick-main\label_class_dict.csv")
 print(class_dict)
 # Get class names
 class_names = class_dict['name'].tolist()
@@ -111,7 +111,7 @@ valid_dataset = CustomDataset(
 )
 
 # Get train and val data loaders
-train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
+train_loader = DataLoader(train_dataset, batch_size=4, shuffle=True)
 valid_loader = DataLoader(valid_dataset, batch_size=1, shuffle=False)
 
 # create segmentation model with pretrained encoder
@@ -119,7 +119,7 @@ valid_loader = DataLoader(valid_dataset, batch_size=1, shuffle=False)
 TRAINING = True
 
 # Set num of epochs
-EPOCHS = 100
+EPOCHS = 500
 
 # Set device: `cuda` or `cpu`
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -142,12 +142,13 @@ class diceloss(torch.nn.Module):
 # loss_fn = diceloss()
 class_weights = [1,10,2,1]
 
-# loss_fn = torch.nn.CrossEntropyLoss(torch.tensor([100,255,100,100]))
+loss_fn = torch.nn.CrossEntropyLoss(torch.tensor([50,255,50,50]))
 
 class WeightedDiceLoss(torch.nn.Module):
     def __init__(self, weights):
         super(WeightedDiceLoss, self).__init__()
-        self.weights = torch.tensor(weights).float()
+        self.weights = torch.tensor(weights,device=DEVICE).float()
+        # self.weights.to(DEVICE)
 
     def forward(self, pred, target):
         smooth = 1.
@@ -165,6 +166,7 @@ class WeightedDiceLoss(torch.nn.Module):
         # Calculate class losses
         class_losses = 1 - ((2. * intersections + smooth) / (A_sum + B_sum + smooth))
 
+        # self.weights.to(DEVICE)
         # Calculate the weighted loss and normalize it based on the sum of the weights
         loss = torch.dot(self.weights, class_losses) / self.weights.sum()
 
@@ -172,7 +174,7 @@ class WeightedDiceLoss(torch.nn.Module):
 
 # Example usage
 # weights = [1, 2, 3]  # Prioritize class 2 and 3 over class 1
-loss_fn = WeightedDiceLoss(class_weights)
+# loss_fn = WeightedDiceLoss(class_weights)
 
 
 # define metrics
@@ -201,13 +203,14 @@ if TRAINING:
     loss_fn.to(DEVICE)
     metric_fn.to(DEVICE)
 
-    loss_value_list = []
-    metric_value_list = []
-
-    loss_value_list_val = []
-    metric_value_list_val = []
 
     for i in range(0, EPOCHS):
+
+        loss_value_list = []
+        metric_value_list = []
+
+        loss_value_list_val = []
+        metric_value_list_val = []
 
         model.train()
 
@@ -256,22 +259,22 @@ if TRAINING:
         with open('loss.csv', 'a', newline='') as file:
             writer = csv.writer(file)
             # Write the list to the CSV file
-            writer.writerow(loss_value_list[-1])
+            writer.writerow(loss_value_list)
 
         with open('iou.csv', 'a', newline='') as file:
             writer = csv.writer(file)
             # Write the list to the CSV file
-            writer.writerow(metric_value_list[-1])
+            writer.writerow(metric_value_list)
 
         with open('loss_val.csv', 'a', newline='') as file:
             writer = csv.writer(file)
             # Write the list to the CSV file
-            writer.writerow(loss_value_list_val[-1])
+            writer.writerow(loss_value_list_val)
 
         with open('iou_val.csv', 'a', newline='') as file:
             writer = csv.writer(file)
             # Write the list to the CSV file
-            writer.writerow(metric_value_list_val[-1])
+            writer.writerow(metric_value_list_val)
 
 
 

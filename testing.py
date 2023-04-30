@@ -28,7 +28,7 @@ ACTIVATION = 'softmax2d' # could be None for logits or 'softmax2d' for multiclas
 
 preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 
-class_dict = pd.read_csv("label_class_dict.csv")
+class_dict = pd.read_csv("durchblick-main\label_class_dict.csv")
 print(class_dict)
 # Get class names
 class_names = class_dict['name'].tolist()
@@ -48,7 +48,7 @@ print('Class RGB values: ', class_rgb_values)
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-DATA_DIR = 'data'
+DATA_DIR = 'durchblick-main\data'
 
 x_test_dir = os.path.join(DATA_DIR, 'test')
 y_test_dir = os.path.join(DATA_DIR, 'test_labels')
@@ -89,7 +89,7 @@ sample_preds_folder = 'sample_predictions/'
 if not os.path.exists(sample_preds_folder):
     os.makedirs(sample_preds_folder)
 
-for idx in range(3):
+for idx in range(50):
 
     random_idx = random.randint(0, len(test_dataset)-1)
     image, gt_mask = test_dataset[random_idx]

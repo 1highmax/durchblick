@@ -146,7 +146,7 @@ class CustomDataset(torch.utils.data.Dataset):
 
 def get_training_augmentation():
     train_transform = [    
-        # album.RandomCrop(height=256, width=256, always_apply=True),
+        #album.RandomCrop(height=256, width=256, always_apply=True),
         album.OneOf(
             [
                 album.HorizontalFlip(p=1),
